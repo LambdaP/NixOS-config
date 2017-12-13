@@ -4,6 +4,14 @@
 
 { config, pkgs, ... }:
 
+let
+  nixos-unstable = import <nixos-unstable> {};
+in
+
+# {
+#   environment.systemPackages = [ nixos-unstable.firefox ];
+# }
+
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -45,6 +53,7 @@
     zsh
     rxvt
     stack
+    nixos-unstable.firefox
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
