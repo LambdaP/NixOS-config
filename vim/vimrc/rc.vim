@@ -104,7 +104,7 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 " Close if last window is a NERD Tree window
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-source ~/.config/nvim/hasktags.vim
+" source ~/.config/nvim/hasktags.vim
 
 " }}}
 
