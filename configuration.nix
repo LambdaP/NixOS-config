@@ -4,14 +4,6 @@
 
 { config, pkgs, ... }:
 
-let
-  nixos-unstable = import <nixos-unstable> {};
-in
-
-# {
-#   environment.systemPackages = [ nixos-unstable.firefox ];
-# }
-
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -46,7 +38,11 @@ in
 
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = with pkgs;
+  let
+    nixos-unstable = import <nixos-unstable> {};
+  in
+  [
     neovim
     wget
     gnumake
