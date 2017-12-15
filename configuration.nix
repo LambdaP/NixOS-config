@@ -41,9 +41,9 @@
   environment.systemPackages = with pkgs;
   let
     nixos-unstable = import <nixos-unstable> {};
-  in
+    neovimPackages = import ./neovim.nix pkgs;
+  in neovimPackages ++
   [
-    neovim
     wget
     gnumake
     git
