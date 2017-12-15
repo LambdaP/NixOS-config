@@ -49,9 +49,10 @@ in
   environment.systemPackages = with pkgs; [
     neovim
     wget
+    gnumake
     git
     zsh
-    rxvt
+    rxvt_unicode
     stack
     nixos-unstable.firefox
   ];
@@ -77,9 +78,23 @@ in
   # services.printing.enable = true;
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.xserver.layout = "fr";
-  # services.xserver.xkbOptions = "eurosign:e";
+  services.xserver = {
+    enable = true;
+    layout = "fr";
+
+    windowManager = {
+      default                       = "xmonad";
+      xmonad.enable                 = true;
+      xmonad.enableContribAndExtras = true;
+    };
+
+    desktopManager = {
+      default      = "none";
+      xterm.enable = false;
+    };
+
+    libinput.enable = true;
+  };
 
   # Enable touchpad support.
   # services.xserver.libinput.enable = true;
