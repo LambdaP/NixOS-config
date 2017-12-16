@@ -40,17 +40,27 @@
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs;
   let
-    nixos-unstable = import <nixos-unstable> {};
     neovimPackages = import ./neovim.nix pkgs;
   in neovimPackages ++
   [
     wget
-    gnumake
     git
+
+    gcc
+    coreutils
+    gnumake
+    manpages
+    stdmanpages
+
+    # Terminal emulation
+    rxvt_unicode-with-plugins
+    urxvt_vtwheel
+    urxvt_font_size
+
+    # Shell
     zsh
-    rxvt_unicode
-    stack
-    nixos-unstable.firefox
+
+    dmenu
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -104,16 +114,43 @@
   users.defaultUserShell = pkgs.zsh;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.extraUsers.p = {
+  users.users.p = {
     description  = "Patrick Lambein";
     isNormalUser = true;
     extraGroups  = [ "wheel" ];
   };
+
+  users.users.p.packages = with pkgs;
+  let
+    nixos-unstable = import <nixos-unstable> {};
+  in [
+      nixos-unstable.firefox  # Browser
+
+      zathura # PDF viewer
+
+      # Text edition
+      haskellPackages.pandoc  # Text format converter
+      texlive.combined.scheme-full
+
+      # Development
+      stack                   # Haskell project manager
+      haskellPackages.hoogle  # Haskell documentation
+
+      valgrind  # Memory analyser
+
+      # Window manager
+      haskellPackages.xmonad          # Tiling window manager
+      haskellPackages.xmonad-contrib  # Additions for Xmonad
+      haskellPackages.yeganesh        # Dmenu wrapper (requires dmenu)
+
+      openvpn
+      tor
+      tor-browser-bundle-bin
+    ];
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
   system.stateVersion = "17.09"; # Did you read the comment?
-
 }
