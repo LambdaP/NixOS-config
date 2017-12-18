@@ -5,62 +5,16 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
-
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  boot.loader.grub = {
-    efiSupport = true;
-    enableCryptodisk = true;
-    gfxmodeEfi = "1024x768";
-  };
-
-  networking = {
-    hostName   = "hermione";                # Define the hostname
-    extraHosts = "127.0.0.1 hermione";      # Create a self-resolving hostname
-    networkmanager.enable = true;           # Let NetworkManager handle network
-  };
-
-  #  Select internationalisation properties.
-  i18n = {
-    consoleFont = "Lat2-Terminus16";        # Console font
-    consoleKeyMap = "fr";                   # Keyboard layout: fr
-    defaultLocale = "fr_FR.UTF-8";          # Default locale: FR UTF-8
-  };
-
-  # Set your time zone.
-  time.timeZone = "Europe/Paris";
-
-  # List packages installed in system profile. To search by name, run:
-  # $ nix-env -qaP | grep wget
-  environment.systemPackages = with pkgs;
-  let
-    neovimPackages = import ./neovim.nix pkgs;
-  in neovimPackages ++
-  [
-    wget
-    git
-
-    gcc
-    coreutils
-    gnumake
-    manpages
-    stdmanpages
-
-    # Terminal emulation
-    rxvt_unicode-with-plugins
-    urxvt_vtwheel
-    urxvt_font_size
-
-    # Shell
-    zsh
-
-    dmenu
+  imports = [
+    ./hardware-configuration.nix  # Include the results of the hardware scan.
+    ./hardware-options.nix        # Extra hardware options
+    ./boot.nix                    # Bootloader options
+    ./networking.nix              # Network options
+    ./locale.nix                  # Locale options
+    ./services.nix
+    ./packages.nix
+    ./xserver.nix                 # Window system options
+    ./users.nix                   # Configure extra users
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -68,85 +22,6 @@
   # programs.bash.enableCompletion = true;
   # programs.mtr.enable = true;
   # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable the X11 windowing system.
-  services.xserver = {
-    enable = true;
-    layout = "fr";
-
-    windowManager = {
-      default                       = "xmonad";
-      xmonad.enable                 = true;
-      xmonad.enableContribAndExtras = true;
-    };
-
-    desktopManager = {
-      default      = "none";
-      xterm.enable = false;
-    };
-
-    libinput.enable = true;
-  };
-
-  # Enable touchpad support.
-  # services.xserver.libinput.enable = true;
-
-  # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.sddm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
-
-  programs.zsh.enable = true;
-
-  users.defaultUserShell = pkgs.zsh;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.p = {
-    description  = "Patrick Lambein";
-    isNormalUser = true;
-    extraGroups  = [ "wheel" ];
-  };
-
-  users.users.p.packages = with pkgs;
-  let
-    nixos-unstable = import <nixos-unstable> {};
-  in [
-      nixos-unstable.firefox  # Browser
-
-      zathura # PDF viewer
-
-      # Text edition
-      haskellPackages.pandoc  # Text format converter
-      texlive.combined.scheme-full
-
-      # Development
-      stack                   # Haskell project manager
-      haskellPackages.hoogle  # Haskell documentation
-
-      valgrind  # Memory analyser
-
-      # Window manager
-      haskellPackages.xmonad          # Tiling window manager
-      haskellPackages.xmonad-contrib  # Additions for Xmonad
-      haskellPackages.yeganesh        # Dmenu wrapper (requires dmenu)
-
-      openvpn
-      tor
-      tor-browser-bundle-bin
-    ];
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database

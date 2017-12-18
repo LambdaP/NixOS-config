@@ -12,28 +12,20 @@
   boot.kernelModules                 = [ "kvm-intel" ];
   boot.extraModulePackages           = [ ];
 
-  boot.initrd.luks.devices."crypt_root" = {
-    device        = "/dev/disk/by-uuid/2f0021b9-7a1d-4ded-b5ff-2215c5890aaf";
-    preLVM        = true;
-    allowDiscards = true;
-  };
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/d88a72f6-0122-4ab8-b91f-fa456edbdc6b";
+      fsType = "ext4";
+    };
 
-  fileSystems."/" = {
-    device  = "/dev/disk/by-uuid/d88a72f6-0122-4ab8-b91f-fa456edbdc6b";
-    fsType  = "ext4";
-    options = [ "noatime" "nodiratime" "discard" ];
-  };
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/F018-5F3A";
+      fsType = "vfat";
+    };
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/F018-5F3A";
-    fsType = "vfat";
-  };
-
-  fileSystems."/home" = {
-    device  = "/dev/disk/by-uuid/136c50fd-40eb-4fff-8e87-460868b672e0";
-    fsType  = "ext4";
-    options = [ "noatime" "nodiratime" "discard" ];
-  };
+  fileSystems."/home" =
+    { device = "/dev/disk/by-uuid/136c50fd-40eb-4fff-8e87-460868b672e0";
+      fsType = "ext4";
+    };
 
   swapDevices =
     [ { device = "/dev/disk/by-uuid/9912dd53-d4b6-4a89-91e1-379434bc74f5"; }
