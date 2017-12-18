@@ -15,6 +15,7 @@
     ./packages.nix
     ./xserver.nix                 # Window system options
     ./users.nix                   # Configure extra users
+    ./shell.nix                   # Shell options and aliases
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
