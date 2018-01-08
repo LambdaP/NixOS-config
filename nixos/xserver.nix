@@ -3,7 +3,9 @@
 {
   services.xserver = {
     enable = true;
-    layout = "fr";
+    layout = "fr,us";
+    
+    xkbOptions = "grp:ctrl_alt_toggle";
 
     windowManager = {
       default                       = "xmonad";

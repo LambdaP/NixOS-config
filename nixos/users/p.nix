@@ -20,10 +20,11 @@
     openvpn
     tor
     tor-browser-bundle-bin
+    tmux
+    nixos-unstable.alacritty
+    ddate
   ] ++ (with haskellPackages; [
     pandoc                        # Text format converter
     hoogle                        # Haskell documentation
-    # xmonad                        # Tiling window manager
-    # xmonad-contrib                # Additions for xmonad
   ]);
 }

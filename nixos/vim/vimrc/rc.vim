@@ -1,27 +1,22 @@
-" Fish compatible ----------------------------------------------------- {{{
-
-set shell=/bin/sh
-
-" " }}}
+" Import and tweak plugins
+"
+let $PLUGINS_VIM=expand("~/.config/nvim/plugins.vim")
+if filereadable($PLUGINS_VIM)
+    source $PLUGINS_VIM
+endif
 
 " Basic options ------------------------------------------------------- {{{
 "
-" Most of this is probably not required with nvim
-
+set shell=/bin/sh   " Fish compatible
 set title           " Change the terminal title
-set showcmd         " count highlighted
-set ruler           " Show where I am in the command area
-set colorcolumn=80  " vertical ruler at 80 characters
-set laststatus=2    " always show the status line
-                    " ↪ (0 = never, 1 = default [multi-window only])
-
-set noml            " Don't read first/last lines of file for settings
-set hidden          " Stash unwritten files in buffer
-set vb              " Don't beep at me
 set cursorline      " Highlight current line
+set colorcolumn=81  " vertical ruler at 81 characters
+set textwidth=80    " Wrap at 80 columns
+
+set nomodeline      " Don't read first/last lines of file for settings
+set hidden          " Stash unwritten files in buffer
+set visualbell      " Don't beep at me
 set scrolloff=3     " Start scrolling when I'm 3 lines from top/bottom
-set history=10000   " Remember commands and search history
-set backspace=2     " Backspace over indent, eol, and insert
 
 set number          " Show linenumbers
 set nowrap          " Turn off linewrap
@@ -32,26 +27,25 @@ set expandtab       " Expand tabs to spaces
 " hs   -> 2
 " C    -> 8?
 " rest -> 4
-set tabstop=2       " 8 spaces
-set shiftwidth=2    " 8 spaces
-set softtabstop=2   " 8 spaces
+set tabstop=2       " 2 spaces
+set shiftwidth=2    " 2 spaces
+set softtabstop=2   " 2 spaces
 
 set ignorecase      " when searching
 set smartcase       " …unless I use an uppercase character
 
 set showmatch       " show matching brackets
-set mat=2
+set matchtime=2     " 
 
 syntax sync minlines=256 " Makes big files slow
 set synmaxcol=2048  " Also long lines are slow
 
-set autoindent      " Indent
-set smartindent     " Do your best
+set smartindent     " Auto-indent new lines
+                    " TODO: should see if plugins are not taking care of this
 
-set fileformats=unix,dos,mac
+" set fileformats=unix,dos,mac " TODO: remove, default options should be OK
 
-set undodir^=~/.config/nvim/undo/ " Places .un~ files in the correct directory
-set undofile
+set undofile          " Save undos after closing files
 set undolevels=10000  " max number of changes that can be undone
 set undoreload=100000 " max number lines to save for undo
                       " on buffer reload
@@ -65,46 +59,10 @@ set completeopt+=longest
 set guifont=Source\ Code\ Pro\ 14 " GUI font
 
 " Yell for long lines
-au BufWinEnter * let w:m1=matchadd('ErrorMsg', '\%>75v.\+', -1)
+au BufWinEnter * let w:m1=matchadd('ErrorMsg', '\%>80v.\+', -1)
 
-" }}}
-
-" Plugin options ------------------------------------------------------ {{{
-
-" Use deoplete
-let g:deoplete#enable_at_startup = 1
-
-" Start completing after two char
-let g:deoplete#auto_completion_start_length = 2
-
-" Have types in neco-ghc -- this slows up things a bit. Use 0 for faster.
-let g:necoghc_enable_detailed_browse = 1
-
-" " <C-h>, <BS>: close popup and delete backword char.
-" inoremap <expr><C-h> deoplete#mappings#smart_close_popup()."\<C-h>"
-" inoremap <expr><BS>  deoplete#mappings#smart_close_popup()."\<C-h>"
-" 
-" " <CR>: close popup and save indent.
-" inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-" function! s:my_cr_function() abort
-"   return deoplete#mappings#close_popup() . "\<CR>"
-" endfunction
-
-" Neomake after each write.
-autocmd! BufWritePost * Neomake
-
-" Open fix list when found.
-let g:neomake_open_list = 2
-
-" NERD Tree on launch
-autocmd vimenter * NERDTree
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
-" Close if last window is a NERD Tree window
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" source ~/.config/nvim/hasktags.vim
+" Preview :s
+set inccommand=nosplit
 
 " }}}
 
@@ -118,6 +76,16 @@ let g:solarized_visibility      = "high"
 let g:solarized_contrast        = "high"
 let g:solarized_termcolors      = 16 " 16 if Solarized is the colorscheme
                                      " of iTerm2, 256 otherwise
+
+" }}}
+
+" Dumb osx ------------------------------------------------------------ {{{
+
+" TODO: can I remove the let?
+let s:uname = system("uname")
+if s:uname == "Darwin\n"
+  set clipboard=unnamed   " TODO: what does this do exactly?
+endif
 
 " }}}
 
@@ -176,11 +144,4 @@ function! NumberToggle()
 endfunc
 
 nnoremap <leader>n :call NumberToggle()<cr>
-
-" terminal sanity
-
-tnoremap <Esc> <C-\><C-n> 
-
-let g:neoterm_size = 10
-
 " }}}

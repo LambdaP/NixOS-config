@@ -15,15 +15,22 @@ in
     pluginDictionaries = [
       # from pkgs.vimPlugins
       { name = "colors-solarized"; }
-      { name = "neomake"; }
+      { name = "ale"; }
+      # { name = "neomake"; } # replaced with ALE
       { name = "deoplete-nvim"; }
       { name = "airline"; }
       { name = "tagbar"; }
       { name = "nerdtree"; }
       { name = "nerdtree-git-plugin"; }
+      { name = "easymotion"; }
+      { name = "vim-indent-guides"; }
 
       # Haskell
       { name = "hoogle"; }
+
+      # LaTeX
+      { name = "vimtex"; }
+      { name = "vim-grammarous"; }
 
       # from our own plugin package set
       # { name = "vim-trailing-whitespace"; }

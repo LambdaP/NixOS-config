@@ -14,6 +14,7 @@
     stdmanpages
 
     gcc
+    arandr
 
     # Terminal emulation
     rxvt_unicode-with-plugins
