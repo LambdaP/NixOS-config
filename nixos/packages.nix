@@ -17,6 +17,8 @@
     arandr
 
     # Terminal emulation
+    alacritty
+    tmux
     rxvt_unicode-with-plugins
     urxvt_vtwheel
     urxvt_font_size
