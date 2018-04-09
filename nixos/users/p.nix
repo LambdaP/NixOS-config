@@ -14,7 +14,7 @@
   in [
     nixos-unstable.firefox
     zathura                       # PDF viewer
-    texlive.combined.scheme-full
+    nixos-unstable.texlive.combined.scheme-full
     stack                         # Haskell project manager
     valgrind                      # Memory analyser
     openvpn
